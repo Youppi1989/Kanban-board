@@ -2,9 +2,27 @@
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+h1 {
+  color: #000;
+}
+
+nav ul li a {
+  color: #000;
+}
+
+button {
+  background-color: #000;
+  color: #fff;
+}
+
+button:disabled {
+  background-color: #999;
+  color: #fff;
+}
+
+select {
+  background-color: #fff;
+  color: #000;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -12,7 +30,6 @@
     animation: App-logo-spin infinite 20s linear;
   }
 }
-
 
 @keyframes App-logo-spin {
   from {
