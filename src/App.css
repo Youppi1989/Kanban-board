@@ -1,13 +1,46 @@
-.App {
-  text-align: center;
+* {
+  box-sizing: border-box;
 }
 
-h1 {
-  color: #000;
+body {
+  padding: 20px;
+}
+
+@font-face {
+  font-family: "Roboto";
+  src: url("./fonts/Roboto-Light.ttf");
+}
+
+header {
+  background-color: #0067a3;
+  width: 1235px;
+  height: 55px;
+  display: flex;
+  align-items: center;
+  margin-left: -20px;
+}
+
+.board {
+  color: aliceblue;
+  font-size: 28px;
+  margin-top: 19px;
+  font-family: "Roboto", sans-serif;
+}
+
+nav ul {
+  display: flex;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+nav ul li {
+  margin-right: 30px;
 }
 
 nav ul li a {
   color: #000;
+  text-decoration: none;
 }
 
 button {
@@ -38,4 +71,47 @@ select {
   to {
     transform: rotate(360deg);
   }
+}
+
+.row-container {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 10px;
+}
+
+.flex-item {
+  flex: 1;
+  margin-right: 15px;
+}
+
+.flex-item:last-child {
+  margin-right: 10px;
+}
+
+.column {
+  background-color: #ebecf0;
+  border-radius: 10px;
+  padding: 10px;
+  margin-bottom: 10px;
+  width: 282px;
+}
+
+.card {
+  background-color: #fff;
+  margin-bottom: 5px;
+  padding: 5px;
+  border-radius: 5px;
+  margin: 10px;
+}
+
+.names {
+  display: flex;
+  flex-wrap: wrap;
+  margin-right: 70px;
+}
+
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
 }

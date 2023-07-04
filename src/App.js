@@ -72,9 +72,13 @@ function App() {
   return (
     <Router>
       <div>
-        <h1>Kanban Board</h1>
+        <header>
+          <h1 class="board">Awesome Kanban Board</h1>
+        </header>
         <nav>
           <ul>
+            {" "}
+            {/* Add this ul element */}
             <li>
               <Link to="/">Backlog</Link>
             </li>
@@ -87,7 +91,8 @@ function App() {
             <li>
               <Link to="/finished">Finished</Link>
             </li>
-          </ul>
+          </ul>{" "}
+          {/* Add this ul element */}
         </nav>
 
         <Routes>
