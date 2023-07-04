@@ -1,7 +1,8 @@
 import "./App.css";
+import "./index.css";
 import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
-import Switch from "react-dom";
+import { BrowserRouter as Router, Route, Link, Routes } from "react-router-dom";
+
 import Backlog from "./components/Backlog.js";
 import Ready from "./components/Ready.js";
 import InProgress from "./components/InProgress.js";
@@ -85,45 +86,58 @@ function App() {
           </ul>
         </nav>
 
-        <Switch>
-          <Route exact path="/">
-            <Backlog tasks={backlogTasks} addNewTask={addNewTask} />
-          </Route>
-          <Route path="/ready">
-            <Ready
-              backlogTasks={backlogTasks}
-              readyTasks={readyTasks}
-              setReadyTasks={setReadyTasks}
-              addNewTask={addNewTask}
-            />
-          </Route>
-          <Route path="/inProgress">
-            <InProgress
-              readyTasks={readyTasks}
-              inProgressTasks={inProgressTasks}
-              setInProgressTasks={setInProgressTasks}
-              addNewTask={addNewTask}
-            />
-          </Route>
-          <Route path="/finished">
-            <Finished
-              inProgressTasks={inProgressTasks}
-              finishedTasks={finishedTasks}
-              setFinishedTasks={setFinishedTasks}
-              addNewTask={addNewTask}
-            />
-          </Route>
-          <Route path="/tasks/:taskId">
-            <TaskDetail
-              tasks={[
-                ...backlogTasks,
-                ...readyTasks,
-                ...inProgressTasks,
-                ...finishedTasks,
-              ]}
-            />
-          </Route>
-        </Switch>
+        <Routes>
+          <Route
+            path="/"
+            element={<Backlog tasks={backlogTasks} addNewTask={addNewTask} />}
+          />
+          <Route
+            path="/ready"
+            element={
+              <Ready
+                backlogTasks={backlogTasks}
+                readyTasks={readyTasks}
+                setReadyTasks={setReadyTasks}
+                addNewTask={addNewTask}
+              />
+            }
+          />
+          <Route
+            path="/inProgress"
+            element={
+              <InProgress
+                readyTasks={readyTasks}
+                inProgressTasks={inProgressTasks}
+                setInProgressTasks={setInProgressTasks}
+                addNewTask={addNewTask}
+              />
+            }
+          />
+          <Route
+            path="/finished"
+            element={
+              <Finished
+                inProgressTasks={inProgressTasks}
+                finishedTasks={finishedTasks}
+                setFinishedTasks={setFinishedTasks}
+                addNewTask={addNewTask}
+              />
+            }
+          />
+          <Route
+            path="/tasks/:taskId"
+            element={
+              <TaskDetail
+                tasks={[
+                  ...backlogTasks,
+                  ...readyTasks,
+                  ...inProgressTasks,
+                  ...finishedTasks,
+                ]}
+              />
+            }
+          />
+        </Routes>
       </div>
     </Router>
   );
