@@ -1,5 +1,3 @@
-import "./App.css";
-import "./index.css";
 import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Route, Link, Routes } from "react-router-dom";
 
@@ -14,6 +12,39 @@ function App() {
   const [readyTasks, setReadyTasks] = useState([]);
   const [inProgressTasks, setInProgressTasks] = useState([]);
   const [finishedTasks, setFinishedTasks] = useState([]);
+  const [activeTaskCount, setActiveTaskCount] = useState(0);
+  const [finishedTaskCount, setFinishedTaskCount] = useState(0);
+
+  const addNewTask = (list, taskTitle) => {
+    if (taskTitle.trim() === "") return;
+
+    const newTask = {
+      id: Date.now(),
+      title: taskTitle,
+      description: "",
+    };
+
+    switch (list) {
+      case "backlog":
+        setBacklogTasks((prevTasks) => [...prevTasks, newTask]);
+        setActiveTaskCount((prevCount) => prevCount + 1);
+        break;
+      case "ready":
+        setReadyTasks((prevTasks) => [...prevTasks, newTask]);
+        setActiveTaskCount((prevCount) => prevCount + 1);
+        break;
+      case "inProgress":
+        setInProgressTasks((prevTasks) => [...prevTasks, newTask]);
+        setActiveTaskCount((prevCount) => prevCount + 1);
+        break;
+      case "finished":
+        setFinishedTasks((prevTasks) => [...prevTasks, newTask]);
+        setFinishedTaskCount((prevCount) => prevCount + 1);
+        break;
+      default:
+        break;
+    }
+  };
 
   useEffect(() => {
     const backlogTasksFromLocalStorage =
@@ -37,33 +68,6 @@ function App() {
     localStorage.setItem("inProgressTasks", JSON.stringify(inProgressTasks));
     localStorage.setItem("finishedTasks", JSON.stringify(finishedTasks));
   }, [backlogTasks, readyTasks, inProgressTasks, finishedTasks]);
-
-  const addNewTask = (list, taskTitle) => {
-    if (taskTitle.trim() === "") return;
-
-    const newTask = {
-      id: Date.now(),
-      title: taskTitle,
-      description: "",
-    };
-
-    switch (list) {
-      case "backlog":
-        setBacklogTasks((prevTasks) => [...prevTasks, newTask]);
-        break;
-      case "ready":
-        setReadyTasks((prevTasks) => [...prevTasks, newTask]);
-        break;
-      case "inProgress":
-        setInProgressTasks((prevTasks) => [...prevTasks, newTask]);
-        break;
-      case "finished":
-        setFinishedTasks((prevTasks) => [...prevTasks, newTask]);
-        break;
-      default:
-        break;
-    }
-  };
 
   return (
     <Router>
@@ -138,6 +142,10 @@ function App() {
             }
           />
         </Routes>
+
+        <footer>
+          Active tasks: {activeTaskCount} Finished tasks: {finishedTaskCount}
+        </footer>
       </div>
     </Router>
   );
