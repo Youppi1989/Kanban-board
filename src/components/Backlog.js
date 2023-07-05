@@ -1,10 +1,27 @@
-
 import React, { useState } from "react";
 
 const Backlog = () => {
   const [backlogTasks, setBacklogTasks] = useState([]);
   const [newTaskName, setNewTaskName] = useState("");
   const [isAddingTask, setIsAddingTask] = useState(false);
+
+  const dataMock = [
+    {
+      title: "backlog",
+      issues: [
+        {
+          id: "12345",
+          name: "Login page – performance issues",
+          description: "Fix performance issues on the login page",
+        },
+        {
+          id: "54321",
+          name: "Sprint bugfix",
+          description: "Fix all the bugs in the sprint",
+        },
+      ],
+    },
+  ];
 
   const handleAddCard = () => {
     setIsAddingTask(true);
@@ -31,6 +48,12 @@ const Backlog = () => {
     <div>
       <h2>Backlog</h2>
       {backlogTasks.map((task) => (
+        <div className="card" key={task.id}>
+          <h3>{task.name}</h3>
+          <p>{task.description || "This task has no description"}</p>
+        </div>
+      ))}
+      {dataMock[0].issues.map((task) => (
         <div className="card" key={task.id}>
           <h3>{task.name}</h3>
           <p>{task.description || "This task has no description"}</p>
