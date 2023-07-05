@@ -86,7 +86,6 @@ const Ready = ({ backlogTasks, readyTasks, setReadyTasks, addNewTask }) => {
           <Link to={`/tasks/${issue.id}`}>{issue.name}</Link>
         </div>
       ))}
-
       {isAddingTask && (
         <div>
           <input
