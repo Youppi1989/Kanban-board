@@ -1,20 +1,36 @@
 import React from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 
-const TaskDetail = ({ tasks }) => {
-  const { taskId } = useParams();
-  const task = tasks.find((task) => task.id === taskId);
+function TaskDetail(props) {
+  const { id } = useParams();
+  const { backlogTasks, readyTasks, inProgressTasks, finishedTasks } = props;
 
-  if (!task) {
-    return <div>Task not found</div>;
-  }
+  const findTaskById = (tasks, taskId) => {
+    return tasks && tasks.find((task) => task.id === taskId);
+  };
+
+  const task =
+    findTaskById(backlogTasks, id) ||
+    findTaskById(readyTasks, id) ||
+    findTaskById(inProgressTasks, id) ||
+    findTaskById(finishedTasks, id);
 
   return (
     <div>
-      <h2>{task.title}</h2>
-      <p>{task.description}</p>
+      <h2>Task Detail</h2>
+      {task ? (
+        <div>
+          <h3>{task.title}</h3>
+          <p>{task.description}</p>
+          <p>
+            <Link to="/">Go Back</Link>
+          </p>
+        </div>
+      ) : (
+        <p>Task not found.</p>
+      )}
     </div>
   );
-};
+}
 
 export default TaskDetail;
