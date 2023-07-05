@@ -50,11 +50,12 @@ const Finished = ({
   return (
     <div className="column">
       <h2>Finished</h2>
-      {finishedTasks.map((task) => (
-        <div key={task.id}>
-          <Link to={`/tasks/${task.id}`}>{task.title}</Link>
-        </div>
-      ))}
+      {finishedTasks &&
+        finishedTasks.map((task) => (
+          <div key={task.id}>
+            <Link to={`/tasks/${task.id}`}>{task.title}</Link>
+          </div>
+        ))}
       {/* Add the new issues */}
       {dataMock[0].issues.map((issue) => (
         <div key={issue.id}>
@@ -66,11 +67,12 @@ const Finished = ({
         <div>
           <select value={selectedTaskId} onChange={handleTaskSelection}>
             <option value="">Select a task</option>
-            {inProgressTasks.map((task) => (
-              <option key={task.id} value={task.id}>
-                {task.title}
-              </option>
-            ))}
+            {inProgressTasks &&
+              inProgressTasks.map((task) => (
+                <option key={task.id} value={task.id}>
+                  {task.title}
+                </option>
+              ))}
           </select>
           <button onClick={handleMoveTask} disabled={!selectedTaskId}>
             Submit
@@ -79,7 +81,7 @@ const Finished = ({
       ) : (
         <button
           onClick={handleAddNewTask}
-          disabled={inProgressTasks.length === 0}
+          disabled={!inProgressTasks || inProgressTasks.length === 0}
         >
           + Add card
         </button>

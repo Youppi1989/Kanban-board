@@ -75,11 +75,12 @@ const Ready = ({ backlogTasks, readyTasks, setReadyTasks, addNewTask }) => {
   return (
     <div className="column">
       <h2>Ready</h2>
-      {readyTasks.map((task) => (
-        <div key={task.id}>
-          <Link to={`/tasks/${task.id}`}>{task.title}</Link>
-        </div>
-      ))}
+      {readyTasks &&
+        readyTasks.map((task) => (
+          <div key={task.id}>
+            <Link to={`/tasks/${task.id}`}>{task.title}</Link>
+          </div>
+        ))}
       {/* Add the new issues */}
       {dataMock[0].issues.map((issue) => (
         <div className="card" key={issue.id}>

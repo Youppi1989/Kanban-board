@@ -48,11 +48,12 @@ const InProgress = ({
   return (
     <div className="column">
       <h2>In Progress</h2>
-      {inProgressTasks.map((task) => (
-        <div key={task.id}>
-          <Link to={`/tasks/${task.id}`}>{task.title}</Link>
-        </div>
-      ))}
+      {inProgressTasks &&
+        inProgressTasks.map((task) => (
+          <div key={task.id}>
+            <Link to={`/tasks/${task.id}`}>{task.title}</Link>
+          </div>
+        ))}
       {/* Add the new issues */}
       {dataMock[0].issues.map((issue) => (
         <div className="card" key={issue.id}>
@@ -64,18 +65,22 @@ const InProgress = ({
         <div>
           <select value={selectedTaskId} onChange={handleTaskSelection}>
             <option value="">Select a task</option>
-            {readyTasks.map((task) => (
-              <option key={task.id} value={task.id}>
-                {task.title}
-              </option>
-            ))}
+            {readyTasks &&
+              readyTasks.map((task) => (
+                <option key={task.id} value={task.id}>
+                  {task.title}
+                </option>
+              ))}
           </select>
           <button onClick={handleMoveTask} disabled={!selectedTaskId}>
             Submit
           </button>
         </div>
       ) : (
-        <button onClick={handleAddNewTask} disabled={readyTasks.length === 0}>
+        <button
+          onClick={handleAddNewTask}
+          disabled={!readyTasks || readyTasks.length === 0}
+        >
           + Add card
         </button>
       )}

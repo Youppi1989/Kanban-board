@@ -66,7 +66,7 @@ const Backlog = ({ addNewTask }) => {
                       {...provided.draggableProps}
                       {...provided.dragHandleProps}
                     >
-                      <Link to={`/tasks/${task.id}`}>{task.name}</Link>
+                      <Link to={`/task/${task.id}`}>{task.title}</Link>
                     </div>
                   )}
                 </Draggable>
@@ -80,7 +80,7 @@ const Backlog = ({ addNewTask }) => {
       {/* Add the new tasks */}
       {dataMock[0].issues.map((issue) => (
         <div className="card" key={issue.id}>
-          <Link to={`/tasks/${issue.id}`}>{issue.name}</Link>
+          <Link to={`/task/${issue.id}`}>{issue.name}</Link>
         </div>
       ))}
 

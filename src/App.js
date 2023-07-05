@@ -19,7 +19,7 @@ function App() {
     if (taskTitle.trim() === "") return;
 
     const newTask = {
-      id: Date.now(),
+      id: Date.now().toString(),
       title: taskTitle,
       description: "",
     };
@@ -32,14 +32,23 @@ function App() {
       case "ready":
         setReadyTasks((prevTasks) => [...prevTasks, newTask]);
         setActiveTaskCount((prevCount) => prevCount + 1);
+        setBacklogTasks((prevTasks) =>
+          prevTasks.filter((task) => task.id !== newTask.id)
+        );
         break;
       case "inProgress":
         setInProgressTasks((prevTasks) => [...prevTasks, newTask]);
         setActiveTaskCount((prevCount) => prevCount + 1);
+        setReadyTasks((prevTasks) =>
+          prevTasks.filter((task) => task.id !== newTask.id)
+        );
         break;
       case "finished":
         setFinishedTasks((prevTasks) => [...prevTasks, newTask]);
         setFinishedTaskCount((prevCount) => prevCount + 1);
+        setInProgressTasks((prevTasks) =>
+          prevTasks.filter((task) => task.id !== newTask.id)
+        );
         break;
       default:
         break;
@@ -56,18 +65,35 @@ function App() {
     const finishedTasksFromLocalStorage =
       JSON.parse(localStorage.getItem("finishedTasks")) || [];
 
-    setBacklogTasks(backlogTasksFromLocalStorage);
-    setReadyTasks(readyTasksFromLocalStorage);
-    setInProgressTasks(inProgressTasksFromLocalStorage);
-    setFinishedTasks(finishedTasksFromLocalStorage);
+    if (backlogTasksFromLocalStorage.length > 0) {
+      setBacklogTasks(backlogTasksFromLocalStorage);
+    }
+    if (readyTasksFromLocalStorage.length > 0) {
+      setReadyTasks(readyTasksFromLocalStorage);
+    }
+    if (inProgressTasksFromLocalStorage.length > 0) {
+      setInProgressTasks(inProgressTasksFromLocalStorage);
+    }
+    if (finishedTasksFromLocalStorage.length > 0) {
+      setFinishedTasks(finishedTasksFromLocalStorage);
+    }
   }, []);
 
   useEffect(() => {
     localStorage.setItem("backlogTasks", JSON.stringify(backlogTasks));
+  }, [backlogTasks]);
+
+  useEffect(() => {
     localStorage.setItem("readyTasks", JSON.stringify(readyTasks));
+  }, [readyTasks]);
+
+  useEffect(() => {
     localStorage.setItem("inProgressTasks", JSON.stringify(inProgressTasks));
+  }, [inProgressTasks]);
+
+  useEffect(() => {
     localStorage.setItem("finishedTasks", JSON.stringify(finishedTasks));
-  }, [backlogTasks, readyTasks, inProgressTasks, finishedTasks]);
+  }, [finishedTasks]);
 
   return (
     <Router>
@@ -79,54 +105,66 @@ function App() {
         <div className="container">
           <Backlog
             tasks={backlogTasks}
-            addNewTask={addNewTask}
-            linkComponent={Link}
+            addNewTask={(taskTitle) => addNewTask("backlog", taskTitle)}
           />
 
           <Ready
-            backlogTasks={backlogTasks}
-            readyTasks={readyTasks}
-            setReadyTasks={setReadyTasks}
-            addNewTask={addNewTask}
-            linkComponent={Link}
+            tasks={readyTasks}
+            addNewTask={(taskTitle) => addNewTask("ready", taskTitle)}
+            moveTask={(taskId) => {
+              const task = readyTasks.find((task) => task.id === taskId);
+              if (task) {
+                addNewTask("inProgress", task.title);
+                setReadyTasks((prevTasks) =>
+                  prevTasks.filter((task) => task.id !== taskId)
+                );
+              }
+            }}
           />
 
           <InProgress
-            readyTasks={readyTasks}
-            inProgressTasks={inProgressTasks}
-            setInProgressTasks={setInProgressTasks}
-            addNewTask={addNewTask}
-            linkComponent={Link}
+            tasks={inProgressTasks}
+            addNewTask={(taskTitle) => addNewTask("inProgress", taskTitle)}
+            moveTask={(taskId) => {
+              const task = inProgressTasks.find((task) => task.id === taskId);
+              if (task) {
+                addNewTask("finished", task.title);
+                setInProgressTasks((prevTasks) =>
+                  prevTasks.filter((task) => task.id !== taskId)
+                );
+              }
+            }}
           />
 
           <Finished
-            inProgressTasks={inProgressTasks}
-            finishedTasks={finishedTasks}
-            setFinishedTasks={setFinishedTasks}
-            addNewTask={addNewTask}
-            linkComponent={Link}
+            tasks={finishedTasks}
+            moveTask={(taskId) => {
+              const task = finishedTasks.find((task) => task.id === taskId);
+              if (task) {
+                setFinishedTasks((prevTasks) =>
+                  prevTasks.filter((task) => task.id !== taskId)
+                );
+                setFinishedTaskCount((prevCount) => prevCount - 1);
+              }
+            }}
           />
+
+          <Routes>
+            <Route
+              path="/task/:taskId"
+              element={
+                <TaskDetail
+                  tasks={[
+                    ...backlogTasks,
+                    ...readyTasks,
+                    ...inProgressTasks,
+                    ...finishedTasks,
+                  ]}
+                />
+              }
+            />
+          </Routes>
         </div>
-
-        <Routes>
-          <Route
-            path="/tasks/:taskId"
-            element={
-              <TaskDetail
-                tasks={[
-                  ...backlogTasks,
-                  ...readyTasks,
-                  ...inProgressTasks,
-                  ...finishedTasks,
-                ]}
-              />
-            }
-          />
-        </Routes>
-
-        <footer>
-          Active tasks: {activeTaskCount} Finished tasks: {finishedTaskCount}
-        </footer>
       </div>
     </Router>
   );
