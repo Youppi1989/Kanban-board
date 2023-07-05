@@ -1,100 +1,55 @@
+
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
-const Backlog = ({ addNewTask }) => {
-  const [newTaskTitle, setNewTaskTitle] = useState("");
+const Backlog = () => {
+  const [backlogTasks, setBacklogTasks] = useState([]);
+  const [newTaskName, setNewTaskName] = useState("");
   const [isAddingTask, setIsAddingTask] = useState(false);
-  const [tasks, setTasks] = useState([]);
 
-  const dataMock = [
-    {
-      title: "backlog",
-      issues: [
-        {
-          id: "12345",
-          name: "Login page – performance issues",
-          description: "Fix performance issues on the login page",
-        },
-        {
-          id: "54321",
-          name: "Sprint bugfix",
-          description: "Fix all the bugs in the sprint",
-        },
-      ],
-    },
-  ];
-
-  const handleNewTaskTitleChange = (e) => {
-    setNewTaskTitle(e.target.value);
+  const handleAddCard = () => {
+    setIsAddingTask(true);
   };
 
-  const handleAddNewTask = () => {
-    if (!isAddingTask) {
-      setIsAddingTask(true);
-    } else {
-      addNewTask("backlog", newTaskTitle);
-      setIsAddingTask(false);
-      setNewTaskTitle("");
+  const handleInputChange = (event) => {
+    setNewTaskName(event.target.value);
+  };
+
+  const handleSubmit = () => {
+    if (newTaskName.trim() !== "") {
+      const newTask = {
+        id: Date.now().toString(),
+        name: newTaskName,
+        description: "",
+      };
+      setBacklogTasks((prevTasks) => [...prevTasks, newTask]);
     }
-  };
-
-  const handleDragEnd = (result) => {
-    if (!result.destination) return;
-
-    const updatedTasks = Array.from(tasks);
-    const [movedTask] = updatedTasks.splice(result.source.index, 1);
-    updatedTasks.splice(result.destination.index, 0, movedTask);
-
-    // Update the order of tasks in the state
-    setTasks(updatedTasks);
+    setNewTaskName("");
+    setIsAddingTask(false);
   };
 
   return (
-    <div className="column">
+    <div>
       <h2>Backlog</h2>
-      <DragDropContext onDragEnd={handleDragEnd}>
-        <Droppable droppableId="backlog">
-          {(provided) => (
-            <div {...provided.droppableProps} ref={provided.innerRef}>
-              {tasks.map((task, index) => (
-                <Draggable key={task.id} draggableId={task.id} index={index}>
-                  {(provided) => (
-                    <div
-                      className="card"
-                      ref={provided.innerRef}
-                      {...provided.draggableProps}
-                      {...provided.dragHandleProps}
-                    >
-                      <Link to={`/task/${task.id}`}>{task.title}</Link>
-                    </div>
-                  )}
-                </Draggable>
-              ))}
-              {provided.placeholder}
-            </div>
-          )}
-        </Droppable>
-      </DragDropContext>
-
-      {/* Add the new tasks */}
-      {dataMock[0].issues.map((issue) => (
-        <div className="card" key={issue.id}>
-          <Link to={`/task/${issue.id}`}>{issue.name}</Link>
+      {backlogTasks.map((task) => (
+        <div className="card" key={task.id}>
+          <h3>{task.name}</h3>
+          <p>{task.description || "This task has no description"}</p>
         </div>
       ))}
-
       {isAddingTask ? (
-        <div>
+        <div className="card">
           <input
             type="text"
-            value={newTaskTitle}
-            onChange={handleNewTaskTitleChange}
+            value={newTaskName}
+            onChange={handleInputChange}
+            placeholder="Enter task name"
           />
-          <button onClick={handleAddNewTask}>Submit</button>
+          <button onClick={handleSubmit} disabled={newTaskName.trim() === ""}>
+            Submit
+          </button>
         </div>
       ) : (
-        <button onClick={handleAddNewTask}>+ Add card</button>
+        <button onClick={handleAddCard}>+ Add card</button>
       )}
     </div>
   );

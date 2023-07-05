@@ -1,9 +1,9 @@
+// Ready.js
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
 
-const Ready = ({ backlogTasks, readyTasks, setReadyTasks, addNewTask }) => {
-  const [newTaskTitle, setNewTaskTitle] = useState("");
-  const [isAddingTask, setIsAddingTask] = useState(false);
+const Ready = () => {
+  const [readyTasks, setReadyTasks] = useState([]);
+  const [backlogTasks, setBacklogTasks] = useState([]);
 
   const dataMock = [
     {
@@ -58,45 +58,56 @@ const Ready = ({ backlogTasks, readyTasks, setReadyTasks, addNewTask }) => {
     },
   ];
 
-  const handleNewTaskTitleChange = (e) => {
-    setNewTaskTitle(e.target.value);
-  };
+  const handleAddCard = () => {
+    if (backlogTasks.length === 0) {
+      return;
+    }
 
-  const handleAddNewTask = () => {
-    if (!isAddingTask) {
-      setIsAddingTask(true);
-    } else {
-      addNewTask("ready", newTaskTitle);
-      setIsAddingTask(false);
-      setNewTaskTitle("");
+    const selectedTask = prompt(
+      "Select a task from the backlog:\n" +
+        backlogTasks.map((task) => task.name).join("\n")
+    );
+
+    if (selectedTask) {
+      const task = backlogTasks.find((task) => task.name === selectedTask);
+      setReadyTasks((prevTasks) => [...prevTasks, task]);
+      setBacklogTasks((prevTasks) =>
+        prevTasks.filter((task) => task.name !== selectedTask)
+      );
     }
   };
 
+  const handleDeleteCard = (taskId) => {
+    setReadyTasks((prevTasks) =>
+      prevTasks.filter((task) => task.id !== taskId)
+    );
+  };
+
   return (
-    <div className="column">
+    <div>
       <h2>Ready</h2>
-      {readyTasks &&
-        readyTasks.map((task) => (
-          <div key={task.id}>
-            <Link to={`/tasks/${task.id}`}>{task.title}</Link>
-          </div>
-        ))}
-      {/* Add the new issues */}
-      {dataMock[0].issues.map((issue) => (
-        <div className="card" key={issue.id}>
-          <Link to={`/tasks/${issue.id}`}>{issue.name}</Link>
+      {readyTasks.map((task) => (
+        <div className="card" key={task.id}>
+          <h3>{task.name}</h3>
+          <p>{task.description || "This task has no description"}</p>
+          <button onClick={() => handleDeleteCard(task.id)}>Delete</button>
         </div>
       ))}
-      {isAddingTask && (
-        <div>
-          <input
-            type="text"
-            value={newTaskTitle}
-            onChange={handleNewTaskTitleChange}
-          />
-          <button onClick={handleAddNewTask}>Submit</button>
+      {dataMock[0].issues.map((task) => (
+        <div className="card" key={task.id}>
+          <h3>{task.name}</h3>
+          <p>{task.description || "This task has no description"}</p>
         </div>
-      )}
+      ))}
+      <button
+        onClick={handleAddCard}
+        disabled={backlogTasks.length === 0}
+        style={{
+          cursor: backlogTasks.length === 0 ? "not-allowed" : "pointer",
+        }}
+      >
+        {backlogTasks.length === 0 ? "No tasks in Backlog" : "+ Add card"}
+      </button>
     </div>
   );
 };

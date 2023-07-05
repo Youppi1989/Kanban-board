@@ -1,33 +1,8 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
 
-const Finished = ({
-  inProgressTasks,
-  finishedTasks,
-  setFinishedTasks,
-  addNewTask,
-}) => {
-  const [selectedTaskId, setSelectedTaskId] = useState("");
-  const [isAddingTask, setIsAddingTask] = useState(false);
-
-  const handleAddNewTask = () => {
-    setIsAddingTask(true);
-  };
-
-  const handleTaskSelection = (e) => {
-    setSelectedTaskId(e.target.value);
-  };
-
-  const handleMoveTask = () => {
-    const selectedTask = inProgressTasks.find(
-      (task) => task.id === Number(selectedTaskId)
-    );
-
-    if (selectedTask) {
-      addNewTask("finished", selectedTask.title);
-      setFinishedTasks((prevTasks) => [...prevTasks, selectedTask]);
-    }
-  };
+const Finished = () => {
+  const [finishedTasks, setFinishedTasks] = useState([]);
+  const [inProgressTasks, setInProgressTasks] = useState([]);
 
   const dataMock = [
     {
@@ -47,45 +22,49 @@ const Finished = ({
     },
   ];
 
+  const handleAddCard = () => {
+    if (inProgressTasks.length === 0) {
+      return;
+    }
+    const selectedTask = prompt(
+      "Select a task from the in progress list:\n" +
+        inProgressTasks.map((task) => task.name).join("\n")
+    );
+
+    if (selectedTask) {
+      const task = inProgressTasks.find((task) => task.name === selectedTask);
+      setFinishedTasks((prevTasks) => [...prevTasks, task]);
+      setInProgressTasks((prevTasks) =>
+        prevTasks.filter((task) => task.name !== selectedTask)
+      );
+    }
+  };
+
+  const handleDeleteCard = (taskId) => {
+    setFinishedTasks((prevTasks) =>
+      prevTasks.filter((task) => task.id !== taskId)
+    );
+  };
+
   return (
-    <div className="column">
+    <div>
       <h2>Finished</h2>
-      {finishedTasks &&
-        finishedTasks.map((task) => (
-          <div key={task.id}>
-            <Link to={`/tasks/${task.id}`}>{task.title}</Link>
-          </div>
-        ))}
-      {/* Add the new issues */}
-      {dataMock[0].issues.map((issue) => (
-        <div key={issue.id}>
-          <Link to={`/tasks/${issue.id}`}>{issue.name}</Link>
+      {finishedTasks.map((task) => (
+        <div className="card" key={task.id}>
+          <h3>{task.name}</h3>
+          <p>{task.description || "This task has no description"}</p>
+          <button onClick={() => handleDeleteCard(task.id)}>Delete</button>
         </div>
       ))}
-
-      {isAddingTask ? (
-        <div>
-          <select value={selectedTaskId} onChange={handleTaskSelection}>
-            <option value="">Select a task</option>
-            {inProgressTasks &&
-              inProgressTasks.map((task) => (
-                <option key={task.id} value={task.id}>
-                  {task.title}
-                </option>
-              ))}
-          </select>
-          <button onClick={handleMoveTask} disabled={!selectedTaskId}>
-            Submit
-          </button>
+      {dataMock[0].issues.map((task) => (
+        <div className="card" key={task.id}>
+          <h3>{task.name}</h3>
+          <p>{task.description || "This task has no description"}</p>
         </div>
-      ) : (
-        <button
-          onClick={handleAddNewTask}
-          disabled={!inProgressTasks || inProgressTasks.length === 0}
-        >
-          + Add card
-        </button>
-      )}
+      ))}
+      <button onClick={handleAddCard} disabled={inProgressTasks.length === 0}>
+        + Add card
+      </button>
     </div>
   );
 };
