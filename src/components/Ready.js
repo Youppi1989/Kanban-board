@@ -87,7 +87,7 @@ const Ready = ({ backlogTasks, readyTasks, setReadyTasks, addNewTask }) => {
         </div>
       ))}
 
-      {isAddingTask ? (
+      {isAddingTask && (
         <div>
           <input
             type="text"
@@ -96,8 +96,6 @@ const Ready = ({ backlogTasks, readyTasks, setReadyTasks, addNewTask }) => {
           />
           <button onClick={handleAddNewTask}>Submit</button>
         </div>
-      ) : (
-        <button onClick={handleAddNewTask}>+ Add card</button>
       )}
     </div>
   );

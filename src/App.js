@@ -73,66 +73,42 @@ function App() {
     <Router>
       <div>
         <header>
-          <h1 class="board">Awesome Kanban Board</h1>
+          <h1 className="board">Awesome Kanban Board</h1>
         </header>
-        <nav>
-          <ul>
-            {" "}
-            {/* Add this ul element */}
-            <li>
-              <Link to="/">Backlog</Link>
-            </li>
-            <li>
-              <Link to="/ready">Ready</Link>
-            </li>
-            <li>
-              <Link to="/inProgress">In Progress</Link>
-            </li>
-            <li>
-              <Link to="/finished">Finished</Link>
-            </li>
-          </ul>{" "}
-          {/* Add this ul element */}
-        </nav>
+
+        <div className="container">
+          <Backlog
+            tasks={backlogTasks}
+            addNewTask={addNewTask}
+            linkComponent={Link}
+          />
+
+          <Ready
+            backlogTasks={backlogTasks}
+            readyTasks={readyTasks}
+            setReadyTasks={setReadyTasks}
+            addNewTask={addNewTask}
+            linkComponent={Link}
+          />
+
+          <InProgress
+            readyTasks={readyTasks}
+            inProgressTasks={inProgressTasks}
+            setInProgressTasks={setInProgressTasks}
+            addNewTask={addNewTask}
+            linkComponent={Link}
+          />
+
+          <Finished
+            inProgressTasks={inProgressTasks}
+            finishedTasks={finishedTasks}
+            setFinishedTasks={setFinishedTasks}
+            addNewTask={addNewTask}
+            linkComponent={Link}
+          />
+        </div>
 
         <Routes>
-          <Route
-            path="/"
-            element={<Backlog tasks={backlogTasks} addNewTask={addNewTask} />}
-          />
-          <Route
-            path="/ready"
-            element={
-              <Ready
-                backlogTasks={backlogTasks}
-                readyTasks={readyTasks}
-                setReadyTasks={setReadyTasks}
-                addNewTask={addNewTask}
-              />
-            }
-          />
-          <Route
-            path="/inProgress"
-            element={
-              <InProgress
-                readyTasks={readyTasks}
-                inProgressTasks={inProgressTasks}
-                setInProgressTasks={setInProgressTasks}
-                addNewTask={addNewTask}
-              />
-            }
-          />
-          <Route
-            path="/finished"
-            element={
-              <Finished
-                inProgressTasks={inProgressTasks}
-                finishedTasks={finishedTasks}
-                setFinishedTasks={setFinishedTasks}
-                addNewTask={addNewTask}
-              />
-            }
-          />
           <Route
             path="/tasks/:taskId"
             element={

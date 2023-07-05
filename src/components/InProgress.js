@@ -75,10 +75,7 @@ const InProgress = ({
           </button>
         </div>
       ) : (
-        <button
-          onClick={handleAddNewTask}
-          disabled={readyTasks.length === 0}
-        >
+        <button onClick={handleAddNewTask} disabled={readyTasks.length === 0}>
           + Add card
         </button>
       )}
