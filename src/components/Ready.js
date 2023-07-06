@@ -1,112 +1,61 @@
 import React, { useState } from "react";
 
-const Ready = () => {
-  const [readyTasks, setReadyTasks] = useState([]);
-  const [backlogTasks, setBacklogTasks] = useState([]);
-
-  const dataMock = [
-    {
-      title: "ready",
-      issues: [
-        {
-          id: "67890",
-          name: "Shop page – performance issues",
-          description: "Fix performance issues on the shop page",
-        },
-        {
-          id: "09876",
-          name: "Checkout bugfix",
-          description: "Fix the bug in the checkout process",
-        },
-        {
-          id: "54321",
-          name: "Shop bug1",
-          description: "Fix shop bug 1",
-        },
-        {
-          id: "12345",
-          name: "Shop bug2",
-          description: "Fix shop bug 2",
-        },
-        {
-          id: "13579",
-          name: "Shop bug3",
-          description: "Fix shop bug 3",
-        },
-        {
-          id: "24680",
-          name: "Shop bug4",
-          description: "Fix shop bug 4",
-        },
-        {
-          id: "86420",
-          name: "Shop bug5",
-          description: "Fix shop bug 5",
-        },
-        {
-          id: "13579",
-          name: "Shop bug6",
-          description: "Fix shop bug 6",
-        },
-        {
-          id: "67891",
-          name: "Shop page – performance issues",
-          description: "Fix performance issues on the shop page",
-        },
-      ],
-    },
-  ];
+const Ready = ({ tasks, onAddTask, onMoveTask }) => {
+  const [newTaskName, setNewTaskName] = useState("");
+  const [isAddingTask, setIsAddingTask] = useState(false);
 
   const handleAddCard = () => {
-    if (backlogTasks.length === 0) {
-      return;
-    }
-
-    const selectedTask = prompt(
-      "Select a task from the backlog:\n" +
-        backlogTasks.map((task) => task.name).join("\n")
-    );
-
-    if (selectedTask) {
-      const task = backlogTasks.find((task) => task.name === selectedTask);
-      setReadyTasks((prevTasks) => [...prevTasks, task]);
-      setBacklogTasks((prevTasks) =>
-        prevTasks.filter((task) => task.name !== selectedTask)
-      );
-    }
+    setIsAddingTask(true);
   };
 
-  const handleDeleteCard = (taskId) => {
-    setReadyTasks((prevTasks) =>
-      prevTasks.filter((task) => task.id !== taskId)
-    );
+  const handleInputChange = (event) => {
+    setNewTaskName(event.target.value);
+  };
+
+  const handleSubmit = () => {
+    if (newTaskName.trim() !== "") {
+      const newTask = {
+        id: Date.now().toString(),
+        name: newTaskName,
+        description: "",
+      };
+      onAddTask(newTask, "ready");
+    }
+    setNewTaskName("");
+    setIsAddingTask(false);
+  };
+
+  const handleMoveCard = (taskId) => {
+    onMoveTask(taskId, "inProgress");
   };
 
   return (
     <div>
       <h2>Ready</h2>
-      {readyTasks.map((task) => (
+      {tasks.map((task) => (
         <div className="card" key={task.id}>
           <h3>{task.name}</h3>
           <p>{task.description || "This task has no description"}</p>
-          <button onClick={() => handleDeleteCard(task.id)}>Delete</button>
+          <button onClick={() => handleMoveCard(task.id)}>
+            Move to In Progress
+          </button>
         </div>
       ))}
-      {dataMock[0].issues.map((task, index) => (
-        <div className="card" key={`${task.id}-${index}`}>
-          <h3>{task.name}</h3>
-          <p>{task.description || "This task has no description"}</p>
+      {isAddingTask ? (
+        <div className="card">
+          <input
+            type="text"
+            value={newTaskName}
+            onChange={handleInputChange}
+            placeholder="Enter task name"
+          />
+          <button onClick={handleSubmit} disabled={newTaskName.trim() === ""}>
+            Submit
+          </button>
         </div>
-      ))}
-      <button
-        onClick={handleAddCard}
-        disabled={backlogTasks.length === 0}
-        style={{
-          cursor: backlogTasks.length === 0 ? "not-allowed" : "pointer",
-        }}
-      >
-        {backlogTasks.length === 0 ? "No tasks in Backlog" : "+ Add card"}
-      </button>
+      ) : (
+        <button onClick={handleAddCard}>+ Add card</button>
+      )}
     </div>
   );
 };
