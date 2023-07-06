@@ -82,7 +82,7 @@ const App = () => {
             </div>
           </div>
         </div>
-        <Route path="/tasks/:taskId" component={TaskDetail} />
+        <Route path="/tasks/:taskId" render={(props) => <TaskDetail tasks={tasks} {...props} />} />
       </div>
     </Router>
   );
