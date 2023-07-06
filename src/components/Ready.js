@@ -19,7 +19,7 @@ const Ready = ({ tasks, onAddTask, onMoveTask }) => {
         name: newTaskName,
         description: "",
       };
-      onAddTask(newTask, "ready");
+      onAddTask(newTask, "backlog"); // Передаем тип "backlog" вместо "ready"
     }
     setNewTaskName("");
     setIsAddingTask(false);

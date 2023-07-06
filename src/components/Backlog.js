@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const Backlog = ({ tasks, onAddTask }) => {
+const Backlog = ({ tasks, onAddTask, onMoveTask }) => {
   const [newTaskName, setNewTaskName] = useState("");
   const [isAddingTask, setIsAddingTask] = useState(false);
 
@@ -19,10 +19,10 @@ const Backlog = ({ tasks, onAddTask }) => {
         name: newTaskName,
         description: "",
       };
-      onAddTask(newTask, "backlog");
+      onAddTask(newTask, "ready"); // Передаем тип "ready" вместо "backlog"
+      setIsAddingTask(false); // Устанавливаем флаг добавления задачи в false после добавления
+      setNewTaskName(""); // Очищаем поле ввода названия задачи
     }
-    setNewTaskName("");
-    setIsAddingTask(false);
   };
 
   return (
