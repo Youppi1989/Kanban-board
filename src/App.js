@@ -38,6 +38,13 @@ const App = () => {
     setTasks((prevTasks) => prevTasks.filter((task) => task.id !== taskId));
   };
 
+  const activeTasksCount = tasks.filter(
+    (task) => task.type === "ready" || task.type === "inProgress"
+  ).length;
+  const finishedTasksCount = tasks.filter(
+    (task) => task.type === "finished"
+  ).length;
+
   return (
     <Router>
       <div className="container">
@@ -82,7 +89,16 @@ const App = () => {
             </div>
           </div>
         </div>
-        <Route path="/tasks/:taskId" render={(props) => <TaskDetail tasks={tasks} {...props} />} />
+        <Route
+          path="/tasks/:taskId"
+          render={(props) => <TaskDetail tasks={tasks} {...props} />}
+        />
+        <footer>
+          <p>
+            Active tasks: {activeTasksCount} | Finished tasks:{" "}
+            {finishedTasksCount}
+          </p>
+        </footer>
       </div>
     </Router>
   );

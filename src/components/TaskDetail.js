@@ -51,7 +51,11 @@ const TaskDetail = ({ tasks }) => {
       <Link to="/" className="homeLink">
         &#8592; Back
       </Link>
-      <h2>{task.name}</h2>
+      <h2>
+        <Link to={`/tasks/${taskId}`} className="taskLink">
+          {task.name}
+        </Link>
+      </h2>
       {editing ? (
         <div>
           <textarea
