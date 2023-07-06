@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 
 const Finished = () => {
   const [finishedTasks, setFinishedTasks] = useState([]);
@@ -58,7 +59,9 @@ const Finished = () => {
       ))}
       {dataMock[0].issues.map((task) => (
         <div className="card" key={task.id}>
-          <h3>{task.name}</h3>
+          <h3>
+            <Link to={`/tasks/${task.id}`}>{task.name}</Link>
+          </h3>
           <p>{task.description || "This task has no description"}</p>
         </div>
       ))}

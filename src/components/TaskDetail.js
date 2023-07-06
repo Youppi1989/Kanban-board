@@ -1,7 +1,5 @@
-
 import React, { useState, useEffect } from "react";
-
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 const TaskDetail = () => {
   const { taskId } = useParams();
@@ -12,11 +10,15 @@ const TaskDetail = () => {
   useEffect(() => {
     const fetchTask = async () => {
       try {
-        // Replace with your data fetching logic
-        const response = await fetch(`API_URL/tasks/${taskId}`);
-        const data = await response.json();
-        setTask(data);
-        setDescription(data.description);
+        // Здесь должна быть логика для получения задачи по идентификатору taskId
+        // Можете использовать ваш собственный код для получения задачи
+        const taskData = {
+          id: taskId,
+          title: "Task " + taskId,
+          description: "Description for Task " + taskId,
+        };
+        setTask(taskData);
+        setDescription(taskData.description);
       } catch (error) {
         console.error(error);
       }
@@ -30,10 +32,8 @@ const TaskDetail = () => {
   };
 
   const handleSaveClick = () => {
-    // Update the task's description in localStorage or an API
-    // Replace this with your actual data updating implementation
-    // For example, you can use fetch() or axios to send a PUT request
-    // with the updated description to the server
+    const updatedTask = { ...task, description };
+    setTask(updatedTask);
     setEditing(false);
   };
 
@@ -52,6 +52,9 @@ const TaskDetail = () => {
 
   return (
     <div>
+      <Link to="/" className="homeLink">
+        &#8592; Back
+      </Link>
       <h2>{task.title}</h2>
       {editing ? (
         <div>

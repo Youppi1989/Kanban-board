@@ -1,4 +1,3 @@
-// Ready.js
 import React, { useState } from "react";
 
 const Ready = () => {
@@ -93,8 +92,8 @@ const Ready = () => {
           <button onClick={() => handleDeleteCard(task.id)}>Delete</button>
         </div>
       ))}
-      {dataMock[0].issues.map((task) => (
-        <div className="card" key={task.id}>
+      {dataMock[0].issues.map((task, index) => (
+        <div className="card" key={`${task.id}-${index}`}>
           <h3>{task.name}</h3>
           <p>{task.description || "This task has no description"}</p>
         </div>

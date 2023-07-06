@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 
 import "./App.css";
 import Backlog from "./components/Backlog.js";
@@ -37,9 +37,6 @@ const App = () => {
             </div>
           </div>
         </div>
-        <Routes>
-          <Route path="/tasks/:taskId" element={<TaskDetail />} />
-        </Routes>
       </div>
     </Router>
   );
