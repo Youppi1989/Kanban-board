@@ -10,6 +10,7 @@ import TaskDetail from "./components/TaskDetail.js";
 
 const App = () => {
   const [tasks, setTasks] = useState([]);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
     const storedTasks = JSON.parse(localStorage.getItem("tasks"));
@@ -45,11 +46,39 @@ const App = () => {
     (task) => task.type === "finished"
   ).length;
 
+  const toggleMenu = () => {
+    setIsMenuOpen((prevIsMenuOpen) => !prevIsMenuOpen);
+  };
+
   return (
     <Router>
       <div className="container">
         <header>
-          <h1 className="board">Awesome Kanban Board</h1>
+          <h1 className="board">
+            Awesome Kanban Board
+            <img
+              src="./assets/user-avatar.png"
+              alt="User Avatar"
+              className="user-avatar"
+              onClick={toggleMenu}
+            />
+            {isMenuOpen && (
+              <ul className="dropdown-menu">
+                <li>
+                  <Link to="/profile">Profile</Link>
+                </li>
+                <li>
+                  <Link to="/logout">Log out</Link>
+                </li>
+              </ul>
+            )}
+            <img
+              src="./assets/arrow-icon.png"
+              alt="Arrow Icon"
+              className={`arrow-icon ${isMenuOpen ? "up" : "down"}`}
+              onClick={toggleMenu}
+            />
+          </h1>
         </header>
         <div className="row-container">
           <div className="flex-item">

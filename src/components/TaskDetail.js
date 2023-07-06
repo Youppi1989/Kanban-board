@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Link, useParams, useHistory } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 const TaskDetail = ({ tasks }) => {
   const { taskId } = useParams();
-  const history = useHistory();
   const [task, setTask] = useState(null);
   const [editing, setEditing] = useState(false);
   const [description, setDescription] = useState("");
@@ -28,7 +27,6 @@ const TaskDetail = ({ tasks }) => {
 
   const handleSaveClick = () => {
     const updatedTask = { ...task, description };
-    const updatedTasks = tasks.map((t) => (t.id === taskId ? updatedTask : t));
     setTask(updatedTask);
     setEditing(false);
   };
@@ -51,11 +49,7 @@ const TaskDetail = ({ tasks }) => {
       <Link to="/" className="homeLink">
         &#8592; Back
       </Link>
-      <h2>
-        <Link to={`/tasks/${taskId}`} className="taskLink">
-          {task.name}
-        </Link>
-      </h2>
+      <h2>{task.name}</h2>
       {editing ? (
         <div>
           <textarea
